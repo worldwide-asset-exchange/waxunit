@@ -5,7 +5,7 @@ This unit test framework allows quick and simple unit testing capabilities for s
 ## Installation
 
 ```
-$ npm install --save-dev waxunit
+$ npm install --save-dev @waxio/waxunit
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ const {
   transfer,
   TESTING_PUBLIC_KEY,
   genericAction,
-} = require('./wax-unit');
+} = require('@waxio/waxunit');
 
 describe('my test suite', () => {
   beforeAll(async () => {
