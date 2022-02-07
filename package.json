@@ -1,19 +1,22 @@
 {
   "name": "@waxio/waxunit",
   "description": "wax.io blockchain smart contract unit testing framework",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "WAX",
   "homepage": "https://wax.io",
   "scripts": {
+    "test": "jest",
     "lint": "prettier --single-quote --trailing-comma es5 --list-different **/*.js",
     "prettier": "prettier --single-quote --trailing-comma es5 --write **/*.js"
   },
   "main": "index",
   "license": "MIT",
   "dependencies": {
-    "eosjs": "^22.1.0"
+    "eosjs": "^22.1.0",
+    "node-fetch": "^2.6.7"
   },
   "devDependencies": {
+    "jest": "^27.5.0",
     "prettier": "^2.5.1"
   }
 }

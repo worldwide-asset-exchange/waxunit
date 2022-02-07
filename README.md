@@ -35,7 +35,7 @@ describe('my test suite', () => {
   beforeAll(async () => {
     await setupTestChain();
     await createAccount('mycontract11');
-    
+
     await setContract(
       'mycontract11',
       'build/mycontract11.wasm',
@@ -70,6 +70,11 @@ describe('my test suite', () => {
   });
 
   it('my test case', async () => {
+    const balances = await getTableRows(
+      'eosio.token',
+      `accounts`,
+      'mycontract11'
+    );
     expect(balances.length).toEqual(1);
     expect(balances[0].balance).toEqual('200.00000000 WAX');
   });
