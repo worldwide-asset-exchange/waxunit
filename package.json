@@ -1,11 +1,9 @@
 {
-  "name": "waxunit",
+  "name": "@waxio/waxunit",
   "description": "wax.io blockchain smart contract unit testing framework",
   "version": "0.0.1",
-  "author": {
-    "name": "wax.io",
-    "url": "https://wax.io"
-  },
+  "author": "WAX",
+  "homepage": "https://wax.io",
   "scripts": {
     "lint": "prettier --single-quote --trailing-comma es5 --list-different **/*.js",
     "prettier": "prettier --single-quote --trailing-comma es5 --write **/*.js"
