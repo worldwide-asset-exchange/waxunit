@@ -14,7 +14,8 @@ const {
 
 describe('my test suite', () => {
   beforeAll(async () => {
-    await setupTestChain();
+    await setupTestChain(); // Must be called first to setup the test chain
+
     await createAccount('mycontract11');
 
     await setContract(
