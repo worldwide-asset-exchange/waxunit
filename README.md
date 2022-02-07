@@ -29,6 +29,7 @@ const {
   transfer,
   TESTING_PUBLIC_KEY,
   genericAction,
+  dedupeTapos,
 } = require('@waxio/waxunit');
 
 describe('my test suite', () => {

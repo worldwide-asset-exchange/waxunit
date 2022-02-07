@@ -10,6 +10,7 @@ const {
   TESTING_PUBLIC_KEY,
   getTableRows,
   genericAction,
+  dedupeTapos,
 } = require('../');
 
 describe('my test suite', () => {
