@@ -8,6 +8,10 @@ This unit test framework allows quick and simple unit testing capabilities for s
 $ npm install --save-dev @waxio/waxunit
 ```
 
+## API
+
+See the [API](./API.md)
+
 ## Usage
 
 ### Tests Setup
