@@ -10,7 +10,7 @@ $ npm install --save-dev @waxio/waxunit
 
 ## Usage
 
-### Tests Setuup 
+### Tests Setup
 
 In the first `beforeAll` type function of your unit tests you must call `setupTestChain`. Example:
 

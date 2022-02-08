@@ -1,7 +1,7 @@
 {
   "name": "@waxio/waxunit",
   "description": "wax.io blockchain smart contract unit testing framework",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "WAX",
   "homepage": "https://wax.io",
   "scripts": {
