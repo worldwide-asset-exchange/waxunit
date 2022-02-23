@@ -21,8 +21,8 @@ describe('my test suite', () => {
 
     await setContract(
       'mycontract11',
-      'tests/artifacts/testwax.wasm',
-      'tests/artifacts/testwax.abi'
+      'tests/test-contract/build/testcontract.wasm',
+      'tests/test-contract/build/testcontract.abi'
     );
     await updateAuth('mycontract11', `active`, `owner`, {
       threshold: 1,
