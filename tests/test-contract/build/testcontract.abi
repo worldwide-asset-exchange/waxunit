@@ -1,6 +1,6 @@
 {
     "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
-    "version": "eosio::abi/1.1",
+    "version": "eosio::abi/1.2",
     "types": [],
     "structs": [
         {
@@ -40,6 +40,34 @@
                     "type": "uint64"
                 }
             ]
+        },
+        {
+            "name": "waxload",
+            "base": "",
+            "fields": [
+                {
+                    "name": "payload",
+                    "type": "waxload_payload[]"
+                }
+            ]
+        },
+        {
+            "name": "waxload_payload",
+            "base": "",
+            "fields": [
+                {
+                    "name": "table_name",
+                    "type": "name"
+                },
+                {
+                    "name": "scope",
+                    "type": "name"
+                },
+                {
+                    "name": "row_data",
+                    "type": "bytes"
+                }
+            ]
         }
     ],
     "actions": [
@@ -52,6 +80,11 @@
             "name": "expireentry",
             "type": "expireentry",
             "ricardian_contract": ""
+        },
+        {
+            "name": "waxload",
+            "type": "waxload",
+            "ricardian_contract": ""
         }
     ],
     "tables": [
@@ -63,6 +96,8 @@
             "key_types": []
         }
     ],
+    "kv_tables": {},
     "ricardian_clauses": [],
-    "variants": []
+    "variants": [],
+    "action_results": []
 }

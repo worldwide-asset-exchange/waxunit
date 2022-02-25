@@ -8,7 +8,7 @@
     "test": "jest",
     "lint": "prettier --single-quote --trailing-comma es5 --list-different **/*.js",
     "prettier": "prettier --single-quote --trailing-comma es5 --write **/*.js",
-    "docs": "jsdoc2md lib/wax-unit.js > API.md"
+    "docs": "jsdoc2md lib/* > API.md"
   },
   "main": "index",
   "license": "MIT",
