@@ -18,7 +18,7 @@ See the [API](./API.md)
 
 In the first `beforeAll` type function of your unit tests you must call `setupTestChain`. Example:
 
-```
+```javascript
 // This is the entire API available to you
 const {
   setupTestChain,
@@ -85,4 +85,23 @@ describe('my test suite', () => {
     expect(balances[0].balance).toEqual('200.00000000 WAX');
   });
 });
+```
+
+### Adding waxload action to input contract table directly
+
+Include `waxunit.hpp` and define `WAX_LOAD_TABLE_ACTION`
+
+```c++
+#include "waxunit.hpp"
+
+// define macro to skip waxload action
+#define WAX_SKIP_HELPERS
+
+CONTRACT example : public eosio::contract {
+  ...
+  public:
+      // ((table_name)(struct_name)(multi_index_typedef))
+      WAX_LOAD_TABLE_ACTION(
+        ((entries)(entries)(entries_t))
+      )
 ```

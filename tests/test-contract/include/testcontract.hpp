@@ -1,4 +1,5 @@
 #include <eosio/eosio.hpp>
+#include "waxunit.hpp"
 
 using namespace std;
 using namespace eosio;
@@ -27,4 +28,9 @@ CONTRACT testcontract : public contract {
       "entries"_n,
       entries
     > entries_t;
+
+  public:
+    WAX_LOAD_TABLE_ACTION(
+      ((entries)(entries)(entries_t))
+    )
 };

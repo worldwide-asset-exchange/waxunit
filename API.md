@@ -1,3 +1,10 @@
+## Classes
+
+<dl>
+<dt><a href="#Contract">Contract</a></dt>
+<dd></dd>
+</dl>
+
 ## Constants
 
 <dl>
@@ -16,16 +23,20 @@ It should be used as the active and owner keys when updating auth on accounts yo
 <dt><a href="#setupTestChain">setupTestChain()</a></dt>
 <dd><p>Sets up the test chain docker image. Must be the first function called in your suite. Only call once</p>
 </dd>
-<dt><a href="#sleep">sleep(milliseconds)</a> ⇒ <code>Promise</code></dt>
-<dd><p>Sleeps for the given milliseconds duration</p>
+<dt><a href="#dedupeTapos">dedupeTapos()</a> ⇒ <code>Tapos</code></dt>
+<dd><p>Generates the tapos fields for a transaction such that the expireSecods field is randomly generated.
+This allows for a weak way to deduplicate repeated transactions, which can happen a lot in testing.</p>
 </dd>
 <dt><a href="#randomWamAccount">randomWamAccount()</a> ⇒ <code>string</code></dt>
 <dd><p>Generates a random *.wam account name</p>
 </dd>
+<dt><a href="#sleep">sleep(milliseconds)</a> ⇒ <code>Promise</code></dt>
+<dd><p>Sleeps for the given milliseconds duration</p>
+</dd>
 <dt><a href="#createAccount">createAccount(account, [bytes])</a> ⇒ <code>Promise.&lt;TransactionReceipt&gt;</code></dt>
 <dd><p>Create an account on the blockchain</p>
 </dd>
-<dt><a href="#setContract">setContract(account, wasmFile, abiFile)</a> ⇒ <code>Promise.&lt;TransactionReceipt&gt;</code></dt>
+<dt><a href="#setContract">setContract(account, wasmFile, abiFile)</a> ⇒ <code><a href="#Contract">Promise.&lt;Contract&gt;</a></code></dt>
 <dd><p>Set a contract on a blockchain account</p>
 </dd>
 <dt><a href="#updateAuth">updateAuth(account, permission, parent)</a> ⇒ <code>Promise.&lt;TransactionReceipt&gt;</code></dt>
@@ -43,11 +54,72 @@ It should be used as the active and owner keys when updating auth on accounts yo
 <dt><a href="#genericAction">genericAction(account, name, data, authorization)</a> ⇒ <code>Promise.&lt;authorization&gt;</code></dt>
 <dd><p>Run a generic blockchain action</p>
 </dd>
-<dt><a href="#dedupeTapos">dedupeTapos()</a> ⇒ <code>Tapos</code></dt>
-<dd><p>Generates the tapos fields for a transaction such that the expireSecods field is randomly generated.
-This allows for a weak way to deduplicate repeated transactions, which can happen a lot in testing.</p>
-</dd>
 </dl>
+
+<a name="Contract"></a>
+
+## Contract
+**Kind**: global class  
+
+* [Contract](#Contract)
+    * [new Contract()](#new_Contract_new)
+    * [.loadTable(tableName, scopeRowsData)](#Contract+loadTable)
+    * [.loadTableFromFile(tableName, filePath)](#Contract+loadTableFromFile)
+    * [.call(actionName, permission, data)](#Contract+call)
+
+<a name="new_Contract_new"></a>
+
+### new Contract()
+Contract
+
+<a name="Contract+loadTable"></a>
+
+### contract.loadTable(tableName, scopeRowsData)
+load data to contract table
+
+**Kind**: instance method of [<code>Contract</code>](#Contract)  
+**Api**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tableName | <code>string</code> | table name |
+| scopeRowsData | <code>Object</code> | scope and rows data |
+
+**Example**  
+```js
+{
+  scope: [{
+     id: 1,
+     name: "daniel111111"
+  }]
+}
+```
+<a name="Contract+loadTableFromFile"></a>
+
+### contract.loadTableFromFile(tableName, filePath)
+Load data to contract table from file
+
+**Kind**: instance method of [<code>Contract</code>](#Contract)  
+**Api**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tableName | <code>string</code> | table name |
+| filePath | <code>string</code> | path to json file |
+
+<a name="Contract+call"></a>
+
+### contract.call(actionName, permission, data)
+Call action of contract
+
+**Kind**: instance method of [<code>Contract</code>](#Contract)  
+**Api**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| actionName | <code>string</code> | action name |
+| permission | <code>Object</code> | permission to call |
+| data | <code>Object</code> | data input to action |
 
 <a name="TESTING_PUBLIC_KEY"></a>
 
@@ -80,6 +152,30 @@ beforeAll(async () => {
   await setupTestChain():
 });
 ```
+<a name="dedupeTapos"></a>
+
+## dedupeTapos() ⇒ <code>Tapos</code>
+Generates the tapos fields for a transaction such that the expireSecods field is randomly generated.
+This allows for a weak way to deduplicate repeated transactions, which can happen a lot in testing.
+
+**Kind**: global function  
+**Returns**: <code>Tapos</code> - tapos object  
+**Api**: public  
+**Example**  
+```js
+eosjs.api.transact({
+  actions: [...],
+},
+dedupeTapos());
+```
+<a name="randomWamAccount"></a>
+
+## randomWamAccount() ⇒ <code>string</code>
+Generates a random *.wam account name
+
+**Kind**: global function  
+**Returns**: <code>string</code> - a random wam account  
+**Api**: public  
 <a name="sleep"></a>
 
 ## sleep(milliseconds) ⇒ <code>Promise</code>
@@ -92,14 +188,6 @@ Sleeps for the given milliseconds duration
 | --- | --- | --- |
 | milliseconds | <code>Number</code> | number of milliseconds to sleep |
 
-<a name="randomWamAccount"></a>
-
-## randomWamAccount() ⇒ <code>string</code>
-Generates a random *.wam account name
-
-**Kind**: global function  
-**Returns**: <code>string</code> - a random wam account  
-**Api**: public  
 <a name="createAccount"></a>
 
 ## createAccount(account, [bytes]) ⇒ <code>Promise.&lt;TransactionReceipt&gt;</code>
@@ -116,11 +204,11 @@ Create an account on the blockchain
 
 <a name="setContract"></a>
 
-## setContract(account, wasmFile, abiFile) ⇒ <code>Promise.&lt;TransactionReceipt&gt;</code>
+## setContract(account, wasmFile, abiFile) ⇒ [<code>Promise.&lt;Contract&gt;</code>](#Contract)
 Set a contract on a blockchain account
 
 **Kind**: global function  
-**Returns**: <code>Promise.&lt;TransactionReceipt&gt;</code> - transaction receipt  
+**Returns**: [<code>Promise.&lt;Contract&gt;</code>](#Contract) - contract instance  
 **Api**: public  
 
 | Param | Type | Description |
@@ -208,19 +296,3 @@ Run a generic blockchain action
 | data | <code>Object</code> | action data json |
 | authorization | <code>Authorization</code> | authorization object. Ie the actor executing the action |
 
-<a name="dedupeTapos"></a>
-
-## dedupeTapos() ⇒ <code>Tapos</code>
-Generates the tapos fields for a transaction such that the expireSecods field is randomly generated.
-This allows for a weak way to deduplicate repeated transactions, which can happen a lot in testing.
-
-**Kind**: global function  
-**Returns**: <code>Tapos</code> - tapos object  
-**Api**: public  
-**Example**  
-```js
-eosjs.api.transact({
-  actions: [...],
-},
-dedupeTapos());
-```
