@@ -86,3 +86,18 @@ describe('my test suite', () => {
   });
 });
 ```
+
+### Adjust block time
+
+Call function `async function setTime(time)` to adjust block time. Refer [here](https://github.com/wolfcw/libfaketime) for more information about `time` format.
+
+Example:
+
+```javascript
+await setTime('+60'); // sets the faked time to 1 minute in future
+await setTime('+10m'); // 10 minutes in future
+
+await setTime('+10y'); // 10 years in future
+```
+
+***note*** Do not set time behind the chain `head_block_time`, it make chain stuck and can not produce block.

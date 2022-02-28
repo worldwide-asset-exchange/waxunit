@@ -11,6 +11,7 @@ const {
   getTableRows,
   genericAction,
   dedupeTapos,
+  setTime,
 } = require('../');
 
 describe('my test suite', () => {
@@ -60,5 +61,71 @@ describe('my test suite', () => {
     );
     expect(balances.length).toEqual(1);
     expect(balances[0].balance).toEqual('200.00000000 WAX');
+  });
+
+  it('test adjust chain time', async () => {
+    // add new entry
+    await genericAction(
+      'mycontract11',
+      'addentry',
+      {
+        id: 1
+      },
+      [
+        {
+          actor: 'mycontract11',
+          permission: 'active'
+        }
+      ]
+    );
+
+    let entries = await getTableRows(
+      'mycontract11',
+      `entries`,
+      'mycontract11'
+    );
+
+    expect(entries.length).toBe(1);
+    expect(entries[0].id).toBe(1);
+
+    await expect(genericAction(
+      'mycontract11',
+      'expireentry',
+      {
+        id: 1,
+        expiry_seconds: 600
+      },
+      [
+        {
+          actor: 'mycontract11',
+          permission: 'active'
+        }
+      ]
+    )).rejects.toThrow('Entry not expired yet');
+
+    await setTime('+601');
+
+    await genericAction(
+      'mycontract11',
+      'expireentry',
+      {
+        id: 1,
+        expiry_seconds: 600
+      },
+      [
+        {
+          actor: 'mycontract11',
+          permission: 'active'
+        }
+      ]
+    );
+
+    entries = await getTableRows(
+      'mycontract11',
+      `entries`,
+      'mycontract11'
+    );
+
+    expect(entries.length).toBe(0);
   });
 });
