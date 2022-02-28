@@ -11,9 +11,10 @@ const {
   getTableRows,
   genericAction,
   dedupeTapos,
+  addTime,
 } = require('../');
 
-describe('my test suite', () => {
+describe('wax-unit', () => {
   let myContract;
   beforeAll(async () => {
     await setupTestChain(); // Must be called first to setup the test chain
@@ -110,7 +111,7 @@ describe('my test suite', () => {
     expect(entries[2].id).toEqual(3);
   });
 
-  it('my test case', async () => {
+  it('can read table data', async () => {
     const balances = await getTableRows(
       'eosio.token',
       `accounts`,
@@ -118,5 +119,239 @@ describe('my test suite', () => {
     );
     expect(balances.length).toEqual(1);
     expect(balances[0].balance).toEqual('200.00000000 WAX');
+  });
+
+  describe('addTime', () => {
+    it('standard path', async () => {
+      const entriesInitial = await getTableRows(
+        'mycontract11',
+        `entries`,
+        'mycontract11'
+      );
+      const id = 4;
+
+      // add new entry
+      const res = await genericAction(
+        'mycontract11',
+        'addentry',
+        {
+          id,
+        },
+        [
+          {
+            actor: 'mycontract11',
+            permission: 'active',
+          },
+        ]
+      );
+
+      let entries = await getTableRows(
+        'mycontract11',
+        `entries`,
+        'mycontract11'
+      );
+
+      expect(entries.length).toBe(entriesInitial.length + 1);
+      expect(entries[entriesInitial.length].id).toBe(id);
+
+      await expect(
+        genericAction(
+          'mycontract11',
+          'expireentry',
+          {
+            id,
+            expiry_seconds: 600,
+          },
+          [
+            {
+              actor: 'mycontract11',
+              permission: 'active',
+            },
+          ]
+        )
+      ).rejects.toThrow('Entry not expired yet');
+
+      await addTime(601, res.processed.block_time);
+
+      await genericAction(
+        'mycontract11',
+        'expireentry',
+        {
+          id,
+          expiry_seconds: 600,
+        },
+        [
+          {
+            actor: 'mycontract11',
+            permission: 'active',
+          },
+        ]
+      );
+
+      entries = await getTableRows('mycontract11', `entries`, 'mycontract11');
+
+      expect(entries.length).toBe(entriesInitial.length);
+    });
+
+    it('can add multiple times', async () => {
+      const entriesInitial = await getTableRows(
+        'mycontract11',
+        `entries`,
+        'mycontract11'
+      );
+      const id = 5;
+
+      // add new entry
+      const res = await genericAction(
+        'mycontract11',
+        'addentry',
+        {
+          id,
+        },
+        [
+          {
+            actor: 'mycontract11',
+            permission: 'active',
+          },
+        ]
+      );
+
+      let entries = await getTableRows(
+        'mycontract11',
+        `entries`,
+        'mycontract11'
+      );
+
+      expect(entries.length).toBe(entriesInitial.length + 1);
+      expect(entries[entriesInitial.length].id).toBe(id);
+
+      await expect(
+        genericAction(
+          'mycontract11',
+          'expireentry',
+          {
+            id,
+            expiry_seconds: 600,
+          },
+          [
+            {
+              actor: 'mycontract11',
+              permission: 'active',
+            },
+          ]
+        )
+      ).rejects.toThrow('Entry not expired yet');
+
+      await addTime(300, res.processed.block_time);
+
+      await expect(
+        genericAction(
+          'mycontract11',
+          'expireentry',
+          {
+            id,
+            expiry_seconds: 600,
+          },
+          [
+            {
+              actor: 'mycontract11',
+              permission: 'active',
+            },
+          ]
+        )
+      ).rejects.toThrow('Entry not expired yet');
+
+      await addTime(301);
+
+      await genericAction(
+        'mycontract11',
+        'expireentry',
+        {
+          id,
+          expiry_seconds: 600,
+        },
+        [
+          {
+            actor: 'mycontract11',
+            permission: 'active',
+          },
+        ]
+      );
+
+      entries = await getTableRows('mycontract11', `entries`, 'mycontract11');
+
+      expect(entries.length).toBe(entriesInitial.length);
+    });
+
+    it('can add far into the future', async () => {
+      const entriesInitial = await getTableRows(
+        'mycontract11',
+        `entries`,
+        'mycontract11'
+      );
+      const id = 6;
+
+      // add new entry
+      const res = await genericAction(
+        'mycontract11',
+        'addentry',
+        {
+          id,
+        },
+        [
+          {
+            actor: 'mycontract11',
+            permission: 'active',
+          },
+        ]
+      );
+
+      let entries = await getTableRows(
+        'mycontract11',
+        `entries`,
+        'mycontract11'
+      );
+
+      expect(entries.length).toBe(entriesInitial.length + 1);
+      expect(entries[entriesInitial.length].id).toBe(id);
+
+      await expect(
+        genericAction(
+          'mycontract11',
+          'expireentry',
+          {
+            id,
+            expiry_seconds: 600,
+          },
+          [
+            {
+              actor: 'mycontract11',
+              permission: 'active',
+            },
+          ]
+        )
+      ).rejects.toThrow('Entry not expired yet');
+
+      await addTime(600001, res.processed.block_time);
+
+      await genericAction(
+        'mycontract11',
+        'expireentry',
+        {
+          id,
+          expiry_seconds: 600,
+        },
+        [
+          {
+            actor: 'mycontract11',
+            permission: 'active',
+          },
+        ]
+      );
+
+      entries = await getTableRows('mycontract11', `entries`, 'mycontract11');
+
+      expect(entries.length).toBe(entriesInitial.length);
+    });
   });
 });

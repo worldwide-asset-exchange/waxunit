@@ -34,6 +34,10 @@ const {
   TESTING_PUBLIC_KEY,
   genericAction,
   dedupeTapos,
+  addTime,
+  getBlockHeight,
+  waitTillBlock,
+  getInfo,
 } = require('@waxio/waxunit');
 
 describe('my test suite', () => {
