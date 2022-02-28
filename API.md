@@ -23,6 +23,19 @@ It should be used as the active and owner keys when updating auth on accounts yo
 <dt><a href="#setupTestChain">setupTestChain()</a></dt>
 <dd><p>Sets up the test chain docker image. Must be the first function called in your suite. Only call once</p>
 </dd>
+<dt><a href="#addTime">addTime(time, [fromBlockTime])</a> ⇒ <code>Promise.&lt;Number&gt;</code></dt>
+<dd><p>Increase time of chain. This function only adds time to the current block time (never reduces). Realize that it is not super accurate.You will definitely increase time by at least the number of seconds you indicate, but likely a few seconds more. So you should not be trying to do super precision tests with this function. Give your tests a few seconds leeway when checking behaviour that does NOT exceed some time span. It will work well for exceeding timeouts, or making large leaps in time, etc.</p>
+</dd>
+<dt><a href="#getInfo">getInfo()</a></dt>
+<dd><p>Gets general information about the blockchain.
+Same as <a href="https://developers.eos.io/manuals/eos/latest/nodeos/plugins/chain_api_plugin/api-reference/index#operation/get_info">https://developers.eos.io/manuals/eos/latest/nodeos/plugins/chain_api_plugin/api-reference/index#operation/get_info</a></p>
+</dd>
+<dt><a href="#getBlockHeight">getBlockHeight()</a></dt>
+<dd><p>Gets the head block height</p>
+</dd>
+<dt><a href="#waitTillBlock">waitTillBlock(target)</a></dt>
+<dd><p>Waits until the specified block has arrived</p>
+</dd>
 <dt><a href="#dedupeTapos">dedupeTapos()</a> ⇒ <code>Tapos</code></dt>
 <dd><p>Generates the tapos fields for a transaction such that the expireSecods field is randomly generated.
 This allows for a weak way to deduplicate repeated transactions, which can happen a lot in testing.</p>
@@ -152,6 +165,47 @@ beforeAll(async () => {
   await setupTestChain():
 });
 ```
+<a name="addTime"></a>
+
+## addTime(time, [fromBlockTime]) ⇒ <code>Promise.&lt;Number&gt;</code>
+Increase time of chain. This function only adds time to the current block time (never reduces). Realize that it is not super accurate.You will definitely increase time by at least the number of seconds you indicate, but likely a few seconds more. So you should not be trying to do super precision tests with this function. Give your tests a few seconds leeway when checking behaviour that does NOT exceed some time span. It will work well for exceeding timeouts, or making large leaps in time, etc.
+
+**Kind**: global function  
+**Returns**: <code>Promise.&lt;Number&gt;</code> - The approximate number of milliseconds that the chain time has been increased by (not super reliable - it is usually more)  
+**Api**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| time | <code>Number</code> | Number of seconds to increase the chain time by |
+| [fromBlockTime] | <code>String</code> | Optional blocktime string. The `time` parameter will add to this absolute value as the target to increase. If this is missing, the `time` value just adds to the current blockchain time time to. |
+
+<a name="getInfo"></a>
+
+## getInfo()
+Gets general information about the blockchain.
+Same as https://developers.eos.io/manuals/eos/latest/nodeos/plugins/chain_api_plugin/api-reference/index#operation/get_info
+
+**Kind**: global function  
+**Api**: public  
+<a name="getBlockHeight"></a>
+
+## getBlockHeight()
+Gets the head block height
+
+**Kind**: global function  
+**Api**: public  
+<a name="waitTillBlock"></a>
+
+## waitTillBlock(target)
+Waits until the specified block has arrived
+
+**Kind**: global function  
+**Api**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| target | <code>Number</code> | block height to wait for |
+
 <a name="dedupeTapos"></a>
 
 ## dedupeTapos() ⇒ <code>Tapos</code>
