@@ -1,6 +1,6 @@
 # waxunit
 
-This unit test framework allows quick and simple unit testing capabilities for samar contracts on the wax blockchain
+This unit test framework allows quick and simple unit testing capabilities for smart contracts on the wax blockchain
 
 ## Installation
 
